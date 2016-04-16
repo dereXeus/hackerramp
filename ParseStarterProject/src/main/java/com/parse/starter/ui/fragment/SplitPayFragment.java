@@ -1,24 +1,22 @@
-package com.parse.starter.ui.activity;
+package com.parse.starter.ui.fragment;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,33 +28,67 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 import com.parse.starter.R;
 import com.parse.starter.parse.Notification;
-import com.parse.starter.parse.Transaction;
 import com.parse.starter.parse.User;
 import com.parse.starter.util.CurrentUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link SplitPayFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link SplitPayFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class SplitPayFragment extends Fragment {
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String AMOUNT = "100";
+    private static final String DESCRIPTION = "Nike Shoes";
 
-public class SplitPaymentActivity extends Activity {
-
-    private static final String TAG = "SplitPaymentActivity";
+    private String amount;
+    private String description;
 
     ArrayList<User> splitUsers = new ArrayList<User>();
     ArrayAdapter<User> splitAdapter;
     ListView splitListView;
-    String merchantName;
-    String merchantCard;
-    String amount;
+    Spinner spinner;
+    Button payButton;
+
+    private OnFragmentInteractionListener mListener;
+
+    public SplitPayFragment() {
+        // Required empty public constructor
+    }
+
+    public static SplitPayFragment newInstance(String amount, String description) {
+        SplitPayFragment fragment = new SplitPayFragment();
+        Bundle args = new Bundle();
+        args.putString(AMOUNT, amount);
+        args.putString(DESCRIPTION, description);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_split);
+        if (getArguments() != null) {
+            amount = getArguments().getString(AMOUNT);
+            description = getArguments().getString(DESCRIPTION);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v =  inflater.inflate(R.layout.fragment_split_pay, container, false);
 
         ArrayList<User> contactList = getContactList();
 
-        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(this, new ParseQueryAdapter.QueryFactory<ParseObject>() {
+        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(this.getActivity(), new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery<ParseObject> create() {
                 // Here we can configure a ParseQuery to our heart's desire.
                 ParseQuery query = new ParseQuery("User");
@@ -82,9 +114,9 @@ public class SplitPaymentActivity extends Activity {
             }
         };
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) v.findViewById(R.id.spinner);
         spinner.setAdapter(adapter);
-        splitAdapter = new ArrayAdapter<User>(this, 0, splitUsers) {
+        splitAdapter = new ArrayAdapter<User>(this.getActivity(), 0, splitUsers) {
             @Override
             public View getView(int position, View v, ViewGroup parent) {
                 if (v == null) {
@@ -98,13 +130,13 @@ public class SplitPaymentActivity extends Activity {
 
         };
 
-        ListView splitListView = (ListView) findViewById(R.id.split_list);
+        ListView splitListView = (ListView) v.findViewById(R.id.split_list);
         splitListView.setAdapter(splitAdapter);
 
         splitListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 User tmp = splitUsers.get(position);
-                AlertDialog.Builder adb = new AlertDialog.Builder(SplitPaymentActivity.this);
+                AlertDialog.Builder adb = new AlertDialog.Builder(SplitPayFragment.this.getActivity());
                 adb.setTitle("Delete?");
                 adb.setMessage("Are you sure you want to remove " + tmp.getName() + " ?");
                 final int positionToRemove = position;
@@ -119,42 +151,59 @@ public class SplitPaymentActivity extends Activity {
             }
         });
 
-        this.merchantName = getIntent().getExtras().getString("merchantName");
-        this.merchantCard = getIntent().getExtras().getString("merchantCard");
-        this.amount = getIntent().getExtras().getString("amount");
+        this.spinner  = (Spinner) v.findViewById(R.id.spinner);
+        Button payButton = (Button) v.findViewById(R.id.split);
 
-        TextView tv_mct_nmm = (TextView)findViewById(R.id.tv_mcht_nm);
-        tv_mct_nmm.setText(this.merchantName);
-        TextView tv_amt =  (TextView)findViewById(R.id.tv_amnt);
-        tv_amt.setText(this.amount + " Rs");
+        Button addButton = (Button) v.findViewById(R.id.add);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addSplitUser(v);
+            }
+        });
+
+        Button splitPayButton = (Button) v.findViewById(R.id.split);
+        splitPayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                splitAmount(v);
+            }
+        });
+        return v;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_split, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 
     public ArrayList<User> getContactList() {
         ArrayList<User> list = new ArrayList<User>();
 
-        ContentResolver cr = getContentResolver();
+        ContentResolver cr = this.getActivity().getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
 
@@ -190,7 +239,6 @@ public class SplitPaymentActivity extends Activity {
     }
 
     public void addSplitUser(View view) {
-        Spinner spinner  = (Spinner) findViewById(R.id.spinner);
         User curr = (User)spinner.getSelectedItem();
 
         if (!splitUsers.contains(curr)) {
@@ -202,12 +250,12 @@ public class SplitPaymentActivity extends Activity {
 
     public void splitAmount(View view) {
         if (splitUsers.size() == 0) {
-            Toast.makeText(this, "Please add people to split", Toast.LENGTH_LONG);
+            Toast.makeText(this.getActivity(), "Please add people to split", Toast.LENGTH_LONG);
             return;
         }
         double totalAmount = Double.parseDouble(amount);
         double indAmount = totalAmount/splitUsers.size();
-        String mcht_nm = merchantName;
+        String mcht_nm = description;
 
         for(User a:splitUsers){
             Notification tmp = new Notification();
@@ -271,7 +319,7 @@ public class SplitPaymentActivity extends Activity {
             int trials = 0;
             while(true){
                 try {
-                    Log.d(TAG,"Trial No. " + trials);
+                    Log.d("SplitPay Fragment","Trial No. " + trials);
                     if(trials > 10){
                         break;
                     }
@@ -298,7 +346,7 @@ public class SplitPaymentActivity extends Activity {
             }else{
                 toastString = "Payment Request Cancelled.. ";
             }
-            Toast.makeText(SplitPaymentActivity.this, toastString, Toast.LENGTH_LONG).show();
+            Toast.makeText(SplitPayFragment.this.getActivity(), toastString, Toast.LENGTH_LONG).show();
 
             try {
                 List<Notification> clearNotifications = notificationParseQuery.find();
@@ -309,13 +357,11 @@ public class SplitPaymentActivity extends Activity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            Button payButton = (Button) findViewById(R.id.split);
             payButton.setEnabled(true);
         }
 
         @Override
         protected void onPreExecute() {
-            Button payButton = (Button) findViewById(R.id.split);
             payButton.setEnabled(false);
         }
 
@@ -326,10 +372,10 @@ public class SplitPaymentActivity extends Activity {
     private boolean checkPaymentApproved(List<Notification> all){
         boolean approved=true;
         for(Notification  a:all){
-            Log.d(TAG,"Notification : " + a.getRequestUser().getName()
+            Log.d("SplitPay Fragment","Notification : " + a.getRequestUser().getName()
                     + " " + a.getForwardToUser().getName() + " " + a.getAmount() + " " + a.getStatus());
             if (a.getStatus().compareTo("P") != 0) {
-               approved = false;
+                approved = false;
             }
         }
         return approved;

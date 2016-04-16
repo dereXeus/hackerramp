@@ -1,11 +1,13 @@
-package com.parse.starter.ui.activity;
-
-
+package com.parse.starter.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,53 +19,118 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
-
 import com.parse.starter.R;
 import com.parse.starter.parse.Notification;
 import com.parse.starter.parse.Transaction;
 import com.parse.starter.parse.User;
+import com.parse.starter.ui.activity.MenuActivity;
+import com.parse.starter.ui.activity.RemotePaymentActivity;
 import com.parse.starter.util.CurrentUser;
 
 import java.util.List;
 
-public class RemotePaymentActivity extends Activity {
-    Spinner spinner;
-    String merchantName;
-    String merchantCard;
-    String amount;
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link RemotePayFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link RemotePayFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class RemotePayFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String AMOUNT = "100";
+    private static final String DESCRIPTION = "Nike Shoes";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_remote_payment);
-        spinner = (Spinner)findViewById(R.id.users);
-        this.merchantName = "CENTRAL PERK";
-        this.amount = "500";
-        this.merchantCard = "abc";
-        TextView tv_mct_nmm = (TextView)findViewById(R.id.tv_mcht_nm);
-        tv_mct_nmm.setText(this.merchantName);
-        TextView tv_amt =  (TextView)findViewById(R.id.tv_amnt);
-        tv_amt.setText(this.amount+" Rs");
-        populateDialog(spinner);
+    // TODO: Rename and change types of parameters
+    private String amount;
+    private String description;
+
+    Spinner spinner;
+
+    private OnFragmentInteractionListener mListener;
+
+    public RemotePayFragment() {
+        // Required empty public constructor
     }
 
-    public void onPayBtnClick(View view){
-        try {
-            Notification notification = new Notification();
-            notification.setAmount(amount);
-            notification.setMerchantName(merchantName);
-            notification.setForwardToUser((User) spinner.getSelectedItem());
-            notification.setRequestUser(CurrentUser.getInstance().getUser());
-            notification.setStatus("U");notification.setPaymentType("R");
-            notification.save();
-            new RemotePaymentTask(this).execute("");
-        } catch (ParseException e) {
-            e.printStackTrace();
+    public static RemotePayFragment newInstance(String amount, String description) {
+        RemotePayFragment fragment = new RemotePayFragment();
+        Bundle args = new Bundle();
+        args.putString(AMOUNT, amount);
+        args.putString(DESCRIPTION, description);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            amount = getArguments().getString(AMOUNT);
+            description = getArguments().getString(DESCRIPTION);
+        }
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v =  inflater.inflate(R.layout.fragment_remote_pay, container, false);
+
+        spinner = (Spinner)v.findViewById(R.id.users);
+
+
+        TextView tv_mct_nmm = (TextView)v.findViewById(R.id.tv_mcht_nm);
+        tv_mct_nmm.setText(this.description);
+        TextView tv_amt =  (TextView)v.findViewById(R.id.tv_amnt);
+        tv_amt.setText(this.amount+" Rs");
+
+        populateDialog(spinner);
+
+        Button payButton = (Button) v.findViewById(R.id.payButton);
+        payButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPayBtnClick(v);
+            }
+        });
+        return v;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
         }
     }
 
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
     void populateDialog(final Spinner spinner){
-        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(this, new ParseQueryAdapter.QueryFactory<ParseObject>() {
+        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(this.getActivity(), new ParseQueryAdapter.QueryFactory<ParseObject>() {
             public ParseQuery<ParseObject> create() {
                 // Here we can configure a ParseQuery to our heart's desire.
                 ParseQuery query = new ParseQuery("User");
@@ -92,6 +159,20 @@ public class RemotePaymentActivity extends Activity {
 
     }
 
+    public void onPayBtnClick(View view){
+        try {
+            Notification notification = new Notification();
+            notification.setAmount(amount);
+            notification.setMerchantName(description);
+            notification.setForwardToUser((User) spinner.getSelectedItem());
+            notification.setRequestUser(CurrentUser.getInstance().getUser());
+            notification.setStatus("U");notification.setPaymentType("R");
+            notification.save();
+            new RemotePaymentTask(this.getActivity()).execute("");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     private class RemotePaymentTask extends AsyncTask<String, Void, String> {
         ParseQuery<Notification> notificationParseQuery;
@@ -156,13 +237,11 @@ public class RemotePaymentActivity extends Activity {
 
                 Transaction transaction = new Transaction();
                 transaction.setAmount((int)Double.parseDouble(amount));
-                transaction.setDescription(merchantName);
+                transaction.setDescription(description);
                 transaction.setTo((User) spinner.getSelectedItem());
                 transaction.setFrom(CurrentUser.getInstance().getUser());
                 transaction.add();
 
-                Intent intent = new Intent(RemotePaymentActivity.this,MenuActivity.class);
-                startActivity(intent);
             }
         }
 

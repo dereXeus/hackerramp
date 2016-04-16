@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.parse.starter.ui.fragment.RemotePayFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Merchant Name"
+        android:id="@+id/tv_mcht_nm"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Amount : 200"
+        android:id="@+id/tv_amnt"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please select user for remote payment"
+        android:layout_margin="10dp"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/users"
+        android:layout_gravity="center_horizontal" />
+
+
+    <Button
+        android:layout_width="315dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Remote Pay"
+        android:id="@+id/payButton"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

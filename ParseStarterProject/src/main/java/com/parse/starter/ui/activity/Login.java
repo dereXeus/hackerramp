@@ -3,6 +3,7 @@ package com.parse.starter.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,8 @@ import java.util.List;
 
 
 public class Login extends Activity {
+
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,16 +74,19 @@ public class Login extends Activity {
             e.printStackTrace();
         }
 
-        Intent intent = new Intent(this,MenuActivity.class);
-        String type = getIntent().getStringExtra("Type");
-        intent.putExtra("Type",type);
+        Intent intent = new Intent(this,PaymentActivity.class);
+
         if(foundUser) {
-            //if(type.equals("Merchant")) intent = new Intent(this,MerchantSide.class);
-            //else intent = new Intent(this, ManagerFragment.class);
             CurrentUser.getInstance().setUser(a);
+            Log.d(TAG,"got user: " + CurrentUser.getInstance().getUser().getName());
         } else {
             intent.putExtra("Phone",phone);
         }
+
+        intent.putExtra("merchantName","ABC Ltd.");
+        intent.putExtra("amount","32.53");
+        intent.putExtra("merchantCard", "VISA");
+
         startActivity(intent);
     }
 }
