@@ -1,0 +1,7 @@
+gradlew
+gradlew.bat
+local.properties
+settings.gradle
+vSplit.iml
+build/
+build/*
