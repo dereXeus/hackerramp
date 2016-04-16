@@ -71,16 +71,7 @@ public class Login extends Activity {
             e.printStackTrace();
         }
 
-        Intent intent = new Intent(this,MenuActivity.class);
-        String type = getIntent().getStringExtra("Type");
-        intent.putExtra("Type",type);
-        if(foundUser) {
-            //if(type.equals("Merchant")) intent = new Intent(this,MerchantSide.class);
-            //else intent = new Intent(this, ManagerFragment.class);
-            CurrentUser.getInstance().setUser(a);
-        } else {
-            intent.putExtra("Phone",phone);
-        }
+        Intent intent = new Intent(this,SearchActivity.class);
         startActivity(intent);
     }
 }

@@ -6,7 +6,7 @@ android {
     buildToolsVersion '23.0.3'
 
     defaultConfig {
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName '1.0'
@@ -22,6 +22,13 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.0'
     compile 'me.dm7.barcodescanner:zxing:1.8'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.1.0'
+    compile 'com.parse:parse-android:1.+'
+    compile 'com.parse:parseui-widget-android:0.0.1'
 }
 
 /* Uncomment if you enable ProGuard and you want to automatically upload symbols on build.
