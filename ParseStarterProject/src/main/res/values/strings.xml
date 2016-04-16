@@ -30,4 +30,6 @@
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_qrcode_reader">QRCodeReader</string>
     <string name="title_activity_qrcode_result">QRCodeResult</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>

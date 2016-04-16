@@ -28,7 +28,6 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    compile 'me.dm7.barcodescanner:zxing:1.8'
     <android:uses-permission android:name="android.permission.READ_CALL_LOG" />
 
     <application
@@ -37,6 +36,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme">
+
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="@string/parse_app_id" />
@@ -59,7 +59,9 @@
 
         <activity
             android:name=".ui.activity.SearchActivity"
-            android:label="Search" >
+            android:label="Search"
+            android:theme="@style/MyMaterialTheme">
+
         </activity>
 
         <activity

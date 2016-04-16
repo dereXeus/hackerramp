@@ -5,3 +5,5 @@ settings.gradle
 vSplit.iml
 build/
 build/*
+.idea
+.gradle
