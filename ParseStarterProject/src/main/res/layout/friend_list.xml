@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/friendList"
+        android:weightSum="1">
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="25dp"
+            android:id="@+id/name"
+            android:hint="Name"
+            android:layout_weight="0.35" />
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="25dp"
+            android:id="@+id/phone"
+            android:hint="Phone No."
+            android:layout_weight="0.60" />
+        <Button
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="25dp"
+            android:id="@+id/remove"
+            android:text="-"
+            android:textSize="16dp"
+            android:layout_weight="0.05" />
+
+    </LinearLayout>
+</RelativeLayout>
