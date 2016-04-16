@@ -54,7 +54,7 @@ public class PaymentActivity extends AppCompatActivity {
         String description = getIntent().getExtras().getString("description");
         String amount = getIntent().getExtras().getString("amount");
         Log.d("Payment Activity","Amount " + amount + " " + description);
-        adapter.addFragment(RemotePayFragment.newInstance(amount,description), "Burrow");
+        adapter.addFragment(RemotePayFragment.newInstance(amount,description), "Borrow");
         adapter.addFragment(SplitPayFragment.newInstance(amount,description), "Split");
         viewPager.setAdapter(adapter);
     }

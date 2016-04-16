@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,6 @@ public  class ManagerFragment extends Fragment {
 					v = View.inflate(getContext(), R.layout.list_row, null);
 				}
 				Account acc = (Account) object;
-
 				TextView descriptionView = (TextView) v.findViewById(R.id.description);
 				TextView amountView = (TextView) v.findViewById(R.id.amount);
 
@@ -107,15 +107,6 @@ public  class ManagerFragment extends Fragment {
 				if (account.getFrom().equals(curr))
 					intent.putExtra("ToPhone", account.getTo().getPhone());
 				else intent.putExtra("ToPhone", account.getFrom().getPhone());
-				startActivity(intent);
-			}
-		});
-
-		Button btn = (Button) v.findViewById(R.id.button);
-		btn.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(),SplitPaymentActivity.class);
 				startActivity(intent);
 			}
 		});

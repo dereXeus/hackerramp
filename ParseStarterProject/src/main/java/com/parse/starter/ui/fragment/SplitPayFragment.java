@@ -152,7 +152,7 @@ public class SplitPayFragment extends Fragment {
         });
 
         this.spinner  = (Spinner) v.findViewById(R.id.spinner);
-        Button payButton = (Button) v.findViewById(R.id.split);
+        payButton = (Button) v.findViewById(R.id.split);
 
         Button addButton = (Button) v.findViewById(R.id.add);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +162,8 @@ public class SplitPayFragment extends Fragment {
             }
         });
 
-        Button splitPayButton = (Button) v.findViewById(R.id.split);
-        splitPayButton.setOnClickListener(new View.OnClickListener() {
+        payButton = (Button) v.findViewById(R.id.split);
+        payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 splitAmount(v);
@@ -322,11 +322,11 @@ public class SplitPayFragment extends Fragment {
 
         @Override
         protected Integer doInBackground(String... params) {
-            int trials = 0;
+            int trials = 1;
             while(true){
                 try {
                     Log.d("SplitPay Fragment","Trial No. " + trials);
-                    if(trials > 10){
+                    if(trials >= 10){
                         break;
                     }
                     List<Notification> status = getPaymentStatus();
@@ -334,7 +334,7 @@ public class SplitPayFragment extends Fragment {
                         makePayment();
                         return  0;
                     }
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                     trials = trials + 1;
                 } catch (InterruptedException e) {
                     Thread.interrupted();

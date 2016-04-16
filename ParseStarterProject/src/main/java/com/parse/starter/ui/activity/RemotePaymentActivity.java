@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -119,11 +120,12 @@ public class RemotePaymentActivity extends Activity {
             int trials = 0;
             while(true){
                 try {
-                    if(trials>200){
+                    Log.d("RemotePayActivity","Trial : " + trials);
+                    if(trials>20){
                         break;
                     }
                     String status = getPaymentStatus();
-                    if("Paid".equals(status)){
+                    if("P".equals(status)){
                         return  "Payment Succesfull .. ";
                     }else if("C".equals(status)){
                         return  "Payment Cancelled  by " + ((User)spinner.getSelectedItem()).getName() + "  .. ";

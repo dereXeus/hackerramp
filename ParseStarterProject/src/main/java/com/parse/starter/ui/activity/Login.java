@@ -72,6 +72,9 @@ public class Login extends Activity {
             e.printStackTrace();
         }
 
+        if(foundUser)
+            CurrentUser.getInstance().setUser(a);
+
         Intent intent = new Intent(this,SearchActivity.class);
         startActivity(intent);
     }
