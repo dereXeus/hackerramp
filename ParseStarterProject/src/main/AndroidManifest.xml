@@ -100,11 +100,6 @@
         <activity android:name=".ui.activity.ForwardPayActivity" >
         </activity>
         <activity
-            android:name=".ui.activity.QRCodeReader"
-            android:label="@string/title_activity_qrcode_reader" >
-
-        </activity>
-        <activity
             android:name=".ui.activity.MenuActivity"
             android:label="@string/title_activity_menu" >
         </activity>

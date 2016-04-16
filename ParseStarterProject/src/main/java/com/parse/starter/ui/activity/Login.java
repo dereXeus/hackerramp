@@ -28,8 +28,6 @@ public class Login extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
-
     }
 
     @Override
@@ -75,7 +73,6 @@ public class Login extends Activity {
         }
 
         Intent intent = new Intent(this,SearchActivity.class);
-
         startActivity(intent);
     }
 }

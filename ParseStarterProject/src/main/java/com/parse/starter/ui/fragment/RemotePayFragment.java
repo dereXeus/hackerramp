@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +41,8 @@ import java.util.List;
 public class RemotePayFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String AMOUNT = "100";
-    private static final String DESCRIPTION = "Nike Shoes";
+    private static final String AMOUNT = "amount";
+    private static final String DESCRIPTION = "description";
 
     // TODO: Rename and change types of parameters
     private String amount;
@@ -68,6 +69,7 @@ public class RemotePayFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            Log.d("Remote Pay Fragment"," Size of set " + getArguments().keySet().size());
             amount = getArguments().getString(AMOUNT);
             description = getArguments().getString(DESCRIPTION);
         }
@@ -82,11 +84,14 @@ public class RemotePayFragment extends Fragment {
 
         spinner = (Spinner)v.findViewById(R.id.users);
 
+        Log.d("Remote Pay Fragment","Size of set " + getArguments().keySet().size());
+        Log.d("Remote Pay Fragment","Amount : " + getArguments().getString(AMOUNT));
+        Log.d("Remote Pay Fragment","Description : " + getArguments().getString(DESCRIPTION));
 
         TextView tv_mct_nmm = (TextView)v.findViewById(R.id.tv_mcht_nm);
-        tv_mct_nmm.setText(this.description);
+        tv_mct_nmm.setText(description);
         TextView tv_amt =  (TextView)v.findViewById(R.id.tv_amnt);
-        tv_amt.setText(this.amount+" Rs");
+        tv_amt.setText(amount+" Rs");
 
         populateDialog(spinner);
 

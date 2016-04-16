@@ -169,6 +169,12 @@ public class SplitPayFragment extends Fragment {
                 splitAmount(v);
             }
         });
+
+        TextView tv_mct_nmm = (TextView)v.findViewById(R.id.tv_mcht_nm);
+        tv_mct_nmm.setText(this.description);
+        TextView tv_amt =  (TextView)v.findViewById(R.id.tv_amnt);
+        tv_amt.setText(this.amount + " Rs");
+
         return v;
     }
 

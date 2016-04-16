@@ -2,17 +2,21 @@ package com.parse.starter.ui.activity;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.starter.R;
+import com.parse.starter.services.models.Product;
 import com.parse.starter.services.models.Response;
 import com.parse.starter.services.MyntraSearchService;
 import com.squareup.picasso.Picasso;
@@ -31,6 +35,9 @@ public class ProductActivity extends Activity {
     public static final String INTENT_STYLEID = "search_key";
 
     TextView responseTxt;
+
+    String amount;
+    String description;
 
     String url = "http://developer.myntra.com/style/550809";
 
@@ -56,6 +63,17 @@ public class ProductActivity extends Activity {
                 Log.d("Error",error.getMessage());
             }
         });
+
+        Button shareBuyButton = (Button) findViewById(R.id.share_buy);
+        shareBuyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductActivity.this,PaymentActivity.class);
+                intent.putExtra("amount",amount);
+                intent.putExtra("description",description);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -72,6 +90,9 @@ public class ProductActivity extends Activity {
         price.setPaintFlags(price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         ImageView img = (ImageView) findViewById(R.id.styleImage);
         Picasso.with(this).load(response.data.styleImages._default.imageURL).into(img);
+
+        this.amount = response.data.discountedPrice.toString();
+        this.description = response.data.productDisplayName;
 
     }
 

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -20,12 +21,9 @@ import com.parse.starter.ui.fragment.SplitPayFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PaymentActivity extends AppCompatActivity {
-
-    String description;
-    String amount;
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -48,14 +46,14 @@ public class PaymentActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        this.description = getIntent().getExtras().getString("description");
-        this.amount = getIntent().getExtras().getString("amount");
-
     }
 
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        String description = getIntent().getExtras().getString("description");
+        String amount = getIntent().getExtras().getString("amount");
+        Log.d("Payment Activity","Amount " + amount + " " + description);
         adapter.addFragment(RemotePayFragment.newInstance(amount,description), "Burrow");
         adapter.addFragment(SplitPayFragment.newInstance(amount,description), "Split");
         viewPager.setAdapter(adapter);
