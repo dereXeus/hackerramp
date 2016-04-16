@@ -35,7 +35,17 @@ public class SearchActivity extends ActionBarActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(SearchActivity.this, "Time for an upgrade!", Toast.LENGTH_SHORT).show();
+                if(position==0) {
+                    mDrawerLayout.closeDrawers();
+                    Toast.makeText(SearchActivity.this, "Search for products", Toast.LENGTH_SHORT).show();
+                }
+                else if(position==1) {
+                    Intent walletIntent = new Intent(SearchActivity.this,WalletActivity.class);
+                    startActivity(walletIntent);
+                }
+                else {
+                    Toast.makeText(SearchActivity.this, "Activity under construction", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
