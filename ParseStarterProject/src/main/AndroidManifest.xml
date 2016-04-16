@@ -60,7 +60,7 @@
         <activity
             android:name=".ui.activity.SearchActivity"
             android:label="Search"
-            android:theme="@style/MyMaterialTheme">
+            android:theme="@style/MyMaterialTheme2">
 
         </activity>
 
@@ -91,11 +91,6 @@
         </service>
 
         <activity
-            android:name=".ui.activity.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.AppCompat.NoActionBar" >
-        </activity>
-        <activity
             android:name=".ui.activity.PaymentActivity"
             android:label="@string/title_activity_payment" >
         </activity>
@@ -104,6 +99,10 @@
         <activity
             android:name=".ui.activity.MenuActivity"
             android:label="@string/title_activity_menu" >
+        </activity>
+        <activity
+            android:name=".ui.activity.WalletActivity"
+            android:label="Wallet" >
         </activity>
     </application>
 

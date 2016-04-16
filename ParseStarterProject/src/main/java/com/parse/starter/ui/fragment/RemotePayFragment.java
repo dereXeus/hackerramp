@@ -202,10 +202,11 @@ public class RemotePayFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            int trials = 0;
+            int trials = 1;
             while(true){
                 try {
-                    if(trials>200){
+                    Log.d("RemotePay Fragment","Trial No. " + trials);
+                    if(trials >= 10){
                         break;
                     }
                     String status = getPaymentStatus();

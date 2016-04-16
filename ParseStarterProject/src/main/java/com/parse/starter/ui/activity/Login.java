@@ -74,6 +74,9 @@ public class Login extends ActionBarActivity {
             e.printStackTrace();
         }
 
+        if(foundUser)
+            CurrentUser.getInstance().setUser(a);
+
         Intent intent = new Intent(this,SearchActivity.class);
         startActivity(intent);
     }

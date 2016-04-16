@@ -7,3 +7,5 @@ build/
 build/*
 .idea
 .gradle
+ParseStarterProject/ParseStarterProject.iml
+*.iml
