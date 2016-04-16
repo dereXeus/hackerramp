@@ -46,26 +46,32 @@
                 <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:orientation="vertical">
 
-                    <AutoCompleteTextView android:id="@+id/phone" android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:hint="Phone Number"
-                        android:inputType="number" android:maxLines="1"
-                        android:singleLine="true"
-                        android:layout_marginBottom="10dp"
-                        android:textColorHint="#999"
-                        android:textColor="#000"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText android:id="@+id/phone" android:layout_width="match_parent"
+                            android:layout_height="wrap_content" android:hint="Phone Number"
+                            android:inputType="number" android:maxLines="1"
+                            android:singleLine="true"
+                            android:layout_marginBottom="10dp"
+                            android:textColorHint="#999"
+                            android:textColor="#000"
+                            android:padding="10dp"
+                            android:fontFamily="sans-serif-light" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <Button android:id="@+id/email_sign_in_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_sign_in"
+                        android:layout_gravity="center_horizontal"
                         android:padding="10dp"
-                        android:background="@drawable/edit_text"
-                        android:fontFamily="sans-serif-light"/>
-
-
-                    <Button android:id="@+id/email_sign_in_button" style="?android:textAppearanceSmall"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp" android:text="@string/action_sign_in"
-                        android:textStyle="bold"
-                        android:textColor="#ffffffff"
-                        android:background="#ff2c3bc2"
-                        android:onClick="loginUser"
-                        android:fontFamily="sans-serif-light"/>
+                        android:theme="@style/myButton"/>
 
                 </LinearLayout>
             </LinearLayout>

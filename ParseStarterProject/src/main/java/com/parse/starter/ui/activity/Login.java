@@ -9,10 +9,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.starter.services.AcceptForwardService;
 import com.parse.starter.ui.fragment.ManagerFragment;
 import com.parse.starter.R;
 import com.parse.starter.parse.User;
@@ -21,7 +23,7 @@ import com.parse.starter.util.CurrentUser;
 import java.util.List;
 
 
-public class Login extends ActionBarActivity {
+public class Login extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
 
@@ -29,6 +31,13 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Button signInButton = (Button) findViewById(R.id.email_sign_in_button);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginUser(v);
+            }
+        });
 
     }
 
@@ -76,6 +85,9 @@ public class Login extends ActionBarActivity {
 
         if(foundUser)
             CurrentUser.getInstance().setUser(a);
+
+        Intent serviceIntent = new Intent(this,AcceptForwardService.class);
+        startService(serviceIntent);
 
         Intent intent = new Intent(this,SearchActivity.class);
         startActivity(intent);

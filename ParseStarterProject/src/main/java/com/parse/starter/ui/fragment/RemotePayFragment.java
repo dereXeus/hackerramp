@@ -206,16 +206,16 @@ public class RemotePayFragment extends Fragment {
             while(true){
                 try {
                     Log.d("RemotePay Fragment","Trial No. " + trials);
-                    if(trials >= 10){
+                    if(trials >= 200){
                         break;
                     }
                     String status = getPaymentStatus();
-                    if("Paid".equals(status)){
+                    if("P".equals(status)){
                         return  "Payment Succesfull .. ";
                     }else if("C".equals(status)){
                         return  "Payment Cancelled  by " + ((User)spinner.getSelectedItem()).getName() + "  .. ";
                     }
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                     trials = trials + 1;
                 } catch (InterruptedException e) {
                     Thread.interrupted();

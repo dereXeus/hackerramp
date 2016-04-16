@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +28,7 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 
 
-public class ProductActivity extends Activity {
+public class ProductActivity extends ActionBarActivity {
 
     MyntraSearchService myntraSearchService;
 
@@ -45,6 +47,12 @@ public class ProductActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         String styleid = getIntent().getStringExtra(INTENT_STYLEID);
         TextView tv = (TextView) findViewById(R.id.price);
         tv.setText("\u20B91799");
@@ -104,8 +112,7 @@ public class ProductActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return false;
     }
 
     @Override

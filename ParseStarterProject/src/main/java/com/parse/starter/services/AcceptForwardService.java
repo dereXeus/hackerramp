@@ -39,14 +39,14 @@ public class AcceptForwardService extends Service{
     }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void issueNotification( String request_user, String amount,String merch_nm) {
-        String msg = request_user + " requested forward way for " + amount;
+        String msg = request_user + " requested to pay for " + amount;
         mNotificationManager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
         // Constructs the Builder object.
         builder =
                 new Notification.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle("Pay Forward")
+                        .setContentTitle("Payment Request")
                         .setContentText(msg)
                         .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
                         .setAutoCancel(true)
@@ -66,7 +66,7 @@ public class AcceptForwardService extends Service{
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         // Because clicking the notification opens a new ("special") activity, there's
-        // no need to create an artificial back stack.
+        //` no need to create an artificial back stack.
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,
@@ -107,7 +107,7 @@ public class AcceptForwardService extends Service{
                                 String  request_user = ((User)request.getParseObject("request_user")).getName();
                                 String amount = request.get("amount").toString();
                                 String merchant_name = request.get("merchant_nm").toString();
-                                Log.i(TAG,request_user + " requested forward way for "+ amount  );
+                                Log.i(TAG,request_user + " requested to pay for "+ amount  );
                                 try {
                                     request.save();
                                 } catch (com.parse.ParseException e1) {

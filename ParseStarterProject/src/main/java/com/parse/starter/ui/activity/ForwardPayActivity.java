@@ -96,12 +96,7 @@ public class ForwardPayActivity extends Activity{
                 public void onClick(View v) {
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(ForwardPayActivity.this);
-                        builder.setTitle("Enter your mPIN");
-
-                        final EditText input = new EditText(ForwardPayActivity.this);
-
-                        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                        builder.setView(input);
+                        builder.setTitle("Are you sure you want to Pay ?");
 
                         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -122,7 +117,7 @@ public class ForwardPayActivity extends Activity{
                                         @Override
                                         public void done(List<ParseObject> requests, com.parse.ParseException e) {
                                             for (ParseObject request : requests) {
-                                                request.put("status", "Paid");
+                                                request.put("status", "P");
                                                 try {
                                                     request.save();
                                                 } catch (ParseException e1) {
@@ -134,9 +129,8 @@ public class ForwardPayActivity extends Activity{
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                String m_Text = input.getText().toString();
                                 make_payment(merchant_nm, merchant_card, amount);
-                                Intent intent = new Intent(ForwardPayActivity.this, MenuActivity.class);
+                                Intent intent = new Intent(ForwardPayActivity.this, SearchActivity.class);
                                 startActivity(intent);
                                 Toast.makeText(getApplicationContext(), "Payment request for " + request_user + " is successfull", Toast.LENGTH_SHORT).show();
                             }

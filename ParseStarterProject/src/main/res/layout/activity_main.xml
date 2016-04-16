@@ -8,22 +8,35 @@
     <!-- The main content view -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="145dp"
+            >
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="245dp"
             android:textAlignment="center"
             android:gravity="center"
+            android:singleLine="true"
+            android:hint="Search"
             android:id="@+id/searchBar" />
 
+        </android.support.design.widget.TextInputLayout>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="GO"
             android:id="@+id/searchButton"
-            android:layout_gravity="center_horizontal|bottom" />
+            android:layout_gravity="center_horizontal|bottom"
+            android:theme="@style/myButton"
+            />
     </LinearLayout>
     <!-- The navigation drawer -->
     <ListView android:id="@+id/nav_list"

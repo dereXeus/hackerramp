@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,9 +25,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
@@ -35,7 +42,7 @@ import com.parse.starter.util.CurrentUser;
 import com.parse.starter.util.functions;
 
 
-public class WalletActivity extends Activity {
+public class WalletActivity extends ActionBarActivity {
 
     private User curr = null;
     private String phone;
@@ -45,6 +52,11 @@ public class WalletActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wallet);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         curr = CurrentUser.getInstance().getUser();
 
@@ -88,6 +100,7 @@ public class WalletActivity extends Activity {
 
                 if(acc.getFrom().equals(curr)) {
                     giveTo = acc.getTo();
+                    amountView.setText("Rs ." + (-acc.getAmount()));
                 }
 
                 descriptionView.setText(giveTo.getName());
@@ -99,18 +112,31 @@ public class WalletActivity extends Activity {
 
         };
 
-        ListView listView = (ListView) findViewById(R.id.list);
+        final ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Account account = (Account) adapter.getItem(position);
-                Intent intent = new Intent(WalletActivity.this, ListTransactionActivity.class);
-                if (account.getFrom().equals(curr))
-                    intent.putExtra("ToPhone", account.getTo().getPhone());
-                else intent.putExtra("ToPhone", account.getFrom().getPhone());
-                startActivity(intent);
+                final Account account = (Account) adapter.getItem(position);
+                if(account.getAmount() < 0 || (account.getFrom().equals(curr) && account.getAmount() > 0)){
+                    AlertDialog.Builder adb = new AlertDialog.Builder(WalletActivity.this);
+                    adb.setTitle("Settle Up");
+                    adb.setMessage("Do you want to Settle Up ?");
+                    adb.setNegativeButton("Cancel", null);
+                    adb.setPositiveButton("Ok", new AlertDialog.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            try {
+                                account.delete();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            adapter.loadObjects();
+                        }
+                    });
+
+                    adb.show();
+                }
             }
         });
 
@@ -120,8 +146,8 @@ public class WalletActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        return false;
     }
 
     @Override
