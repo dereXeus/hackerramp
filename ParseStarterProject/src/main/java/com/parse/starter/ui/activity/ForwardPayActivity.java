@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +33,7 @@ import com.parse.starter.util.CurrentUser;
 import java.util.List;
 
 
-/**
- * Created by sugaddam on 7/25/2015.
- */
-public class ForwardPayActivity extends Activity{
+public class ForwardPayActivity extends ActionBarActivity {
     private static CurrentUser instance = CurrentUser.getInstance();
     /** Called when the activity is first created. */
 
@@ -47,38 +46,11 @@ public class ForwardPayActivity extends Activity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.accept_forward_pay_request);
-        setTitle("Forward Pay Request ");
 
-        final ParseQueryAdapter<ParseObject> adapter = new ParseQueryAdapter<ParseObject>(this, new ParseQueryAdapter.QueryFactory<ParseObject>() {
-            public ParseQuery<ParseObject> create() {
-                // Here we can configure a ParseQuery to our heart's desire.
-                ParseQuery query = new ParseQuery("Card");
-                query.whereEqualTo("user", CurrentUser.getInstance().getUser());
-                return query;
-            }
-        }) {
-            @Override
-            public View getItemView(ParseObject object, View v, ViewGroup parent) {
-                if (v == null) {
-                    v = View.inflate(getContext(), R.layout.custom_spinner, null);
-                }
-                Card card = (Card) object;
-                TextView nameView = (TextView) v.findViewById(R.id.Name);
-                nameView.setText(card.getCardNum());
-                return v;
-            }
-
-            @Override
-            public int getViewTypeCount() {
-                return 1;
-            }
-        };
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.cardlist);
-        spinner.setAdapter(adapter);
-
-
+        setTitle("Share Pay Request ");
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -110,7 +82,7 @@ public class ForwardPayActivity extends Activity{
                                     ParseQuery<ParseObject> query = ParseQuery.getQuery("Notification");
                                     query.whereEqualTo("forward_to", instance.getUser());
                                     query.whereEqualTo("request_user", rqst_usr);
-                                    query.whereEqualTo("status", "P");
+                                    query.whereEqualTo("status", "S");
                                     query.orderByDescending("createdAt");
                                     query.findInBackground(new FindCallback<ParseObject>() {
                                         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -139,6 +111,9 @@ public class ForwardPayActivity extends Activity{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
+                                Toast.makeText(getApplicationContext(), "Payment request for " + request_user + " cancelled", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ForwardPayActivity.this, SearchActivity.class);
+                                startActivity(intent);
                             }
                         });
                         builder.show();

@@ -125,6 +125,7 @@ public class RemotePaymentActivity extends Activity {
                         break;
                     }
                     String status = getPaymentStatus();
+                    Log.d("RemotePayActivity","Status : " + getPaymentStatus());
                     if("P".equals(status)){
                         return  "Payment Succesfull .. ";
                     }else if("C".equals(status)){

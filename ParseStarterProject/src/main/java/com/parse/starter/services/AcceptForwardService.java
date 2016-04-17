@@ -103,7 +103,7 @@ public class AcceptForwardService extends Service{
                             if (requests.size()>0){
                                 Log.i(TAG, requests.toString());
                                 com.parse.starter.parse.Notification request = requests.get(0);
-                                request.put("status","P");
+                                request.put("status","S");
                                 String  request_user = ((User)request.getParseObject("request_user")).getName();
                                 String amount = request.get("amount").toString();
                                 String merchant_name = request.get("merchant_nm").toString();

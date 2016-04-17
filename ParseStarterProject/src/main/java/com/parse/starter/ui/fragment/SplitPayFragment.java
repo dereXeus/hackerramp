@@ -326,7 +326,7 @@ public class SplitPayFragment extends Fragment {
             while(true){
                 try {
                     Log.d("SplitPay Fragment","Trial No. " + trials);
-                    if(trials >= 200){
+                    if(trials >= 20){
                         break;
                     }
                     List<Notification> status = getPaymentStatus();
@@ -334,7 +334,7 @@ public class SplitPayFragment extends Fragment {
                         makePayment();
                         return  0;
                     }
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                     trials = trials + 1;
                 } catch (InterruptedException e) {
                     Thread.interrupted();
