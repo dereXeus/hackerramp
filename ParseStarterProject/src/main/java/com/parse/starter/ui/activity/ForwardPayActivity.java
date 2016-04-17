@@ -102,16 +102,49 @@ public class ForwardPayActivity extends ActionBarActivity {
                                     e.printStackTrace();
                                 }
                                 make_payment(merchant_nm, merchant_card, amount);
+
+                                Toast.makeText(getApplicationContext(), "Payment request for " + request_user + " is successfull", Toast.LENGTH_LONG).show();
+
                                 Intent intent = new Intent(ForwardPayActivity.this, SearchActivity.class);
                                 startActivity(intent);
-                                Toast.makeText(getApplicationContext(), "Payment request for " + request_user + " is successfull", Toast.LENGTH_SHORT).show();
                             }
                         });
                         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
-                                Toast.makeText(getApplicationContext(), "Payment request for " + request_user + " cancelled", Toast.LENGTH_SHORT).show();
+
+                                User rqst_usr = null;
+                                ParseQuery<User> usr_query = ParseQuery.getQuery("User");
+                                usr_query.whereEqualTo("name", request_user);
+                                try {
+
+                                    rqst_usr = usr_query.find().get(0);
+                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("Notification");
+                                    query.whereEqualTo("forward_to", instance.getUser());
+                                    query.whereEqualTo("request_user", rqst_usr);
+                                    query.whereEqualTo("status", "S");
+                                    query.orderByDescending("createdAt");
+                                    query.findInBackground(new FindCallback<ParseObject>() {
+                                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                                        @Override
+                                        public void done(List<ParseObject> requests, com.parse.ParseException e) {
+                                            for (ParseObject request : requests) {
+                                                request.put("status", "C");
+                                                try {
+                                                    request.save();
+                                                } catch (ParseException e1) {
+                                                    e1.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    });
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                Toast.makeText(getApplicationContext(), "Payment request for " + request_user + " is cancelled", Toast.LENGTH_LONG).show();
+
                                 Intent intent = new Intent(ForwardPayActivity.this, SearchActivity.class);
                                 startActivity(intent);
                             }
@@ -132,7 +165,7 @@ public class ForwardPayActivity extends ActionBarActivity {
                         ParseQuery<ParseObject> query = ParseQuery.getQuery("Notification");
                         query.whereEqualTo("forward_to", instance.getUser());
                         query.whereEqualTo("request_user", rqst_usr);
-                        query.whereEqualTo("status", "P");
+                        query.whereEqualTo("status", "S");
                         query.orderByDescending("createdAt");
                         query.findInBackground(new FindCallback<ParseObject>() {
                             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

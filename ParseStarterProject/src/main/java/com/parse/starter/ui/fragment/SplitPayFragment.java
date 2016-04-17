@@ -260,7 +260,7 @@ public class SplitPayFragment extends Fragment {
             return;
         }
         double totalAmount = Double.parseDouble(amount);
-        double indAmount = totalAmount/splitUsers.size();
+        double indAmount = totalAmount/(splitUsers.size()+1);
         String mcht_nm = description;
 
         for(User a:splitUsers){
