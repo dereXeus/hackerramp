@@ -101,7 +101,7 @@ public class WalletActivity extends ActionBarActivity {
 
                 if(acc.getFrom().equals(curr)) {
                     giveTo = acc.getTo();
-                    amountView.setText("Rs ." + (-acc.getAmount()));
+                    amountView.setText("Rs. " + (-acc.getAmount()));
                 }
 
                 descriptionView.setText(giveTo.getName());
