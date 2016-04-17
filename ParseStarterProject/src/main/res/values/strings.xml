@@ -25,7 +25,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_merchant_or_client">MerchantOrClient</string>
     <string name="title_activity_merchant_side">MerchantSide</string>
-    <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_payment">Payment</string>
     <string name="title_activity_qrcode_read">QRCodeRead</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_qrcode_reader">QRCodeReader</string>
